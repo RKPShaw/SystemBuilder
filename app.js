@@ -77,11 +77,21 @@ class SystemModel {
 const canvasEl = document.getElementById("canvas");
 const componentListEl = document.getElementById("component-list");
 const inspectorEl = document.getElementById("inspector-log");
+const connectionLayer = document.getElementById("connection-layer");
 
 const system = new SystemModel();
 const portIndex = new Map();
 let pendingPortId = null;
 let equipmentCounter = 0;
+
+const STARTER_LAYOUT = [
+  { ref: "mixer", componentId: "mixer-compact", position: { x: 460, y: 260 } },
+  { ref: "wiredMic", componentId: "mic-wired", position: { x: 200, y: 200 } },
+  { ref: "wirelessMic", componentId: "mic-wireless", position: { x: 200, y: 360 } },
+  { ref: "leftSpeaker", componentId: "speaker-powered", position: { x: 720, y: 200 } },
+  { ref: "rightSpeaker", componentId: "speaker-powered", position: { x: 720, y: 360 } },
+  { ref: "distro", componentId: "power-distro", position: { x: 460, y: 420 } }
+];
 
 function logInspector(message, status = "info") {
   const entry = document.createElement("p");
@@ -89,6 +99,45 @@ function logInspector(message, status = "info") {
   if (status === "error") entry.classList.add("connection-error");
   entry.textContent = message;
   inspectorEl.prepend(entry);
+}
+
+function getPortCoordinates(portId) {
+  const portEl = canvasEl.querySelector(`[data-port-id="${portId}"]`);
+  if (!portEl) return null;
+  const canvasRect = canvasEl.getBoundingClientRect();
+  const portRect = portEl.getBoundingClientRect();
+  return {
+    x: portRect.left - canvasRect.left + portRect.width / 2,
+    y: portRect.top - canvasRect.top + portRect.height / 2
+  };
+}
+
+function createWirePath(start, end) {
+  const deltaX = end.x - start.x;
+  const direction = deltaX === 0 ? 1 : Math.sign(deltaX);
+  const curveStrength = Math.max(Math.abs(deltaX) * 0.4, 60);
+  const c1x = start.x + curveStrength * direction;
+  const c2x = end.x - curveStrength * direction;
+  return `M ${start.x} ${start.y} C ${c1x} ${start.y} ${c2x} ${end.y} ${end.x} ${end.y}`;
+}
+
+function renderConnections() {
+  if (!connectionLayer) return;
+  connectionLayer.innerHTML = "";
+  system.connections.forEach((connection) => {
+    const start = getPortCoordinates(connection.a);
+    const end = getPortCoordinates(connection.b);
+    if (!start || !end) return;
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", createWirePath(start, end));
+    const medium =
+      portIndex.get(connection.a)?.medium || portIndex.get(connection.b)?.medium;
+    if (medium) {
+      path.dataset.medium = medium;
+    }
+    path.classList.add("connection-wire");
+    connectionLayer.appendChild(path);
+  });
 }
 
 function renderComponentLibrary() {
@@ -153,6 +202,7 @@ function renderEquipment(equipment, position) {
   });
 
   canvasEl.appendChild(equipmentEl);
+  renderConnections();
 }
 
 function handlePortClick(portId, portEl) {
@@ -190,6 +240,7 @@ function handlePortClick(portId, portEl) {
         `Connected ${firstPort.label} to ${secondPort.label}.`,
         "ok"
       );
+      renderConnections();
     } else {
       logInspector(`Cannot connect: ${result.reason}`, "error");
     }
@@ -223,5 +274,65 @@ function setupCanvasInteractions() {
   });
 }
 
+function bootstrapDemoRig() {
+  const instances = {};
+  STARTER_LAYOUT.forEach((item) => {
+    const equipment = createEquipmentInstance(item.componentId);
+    if (!equipment) return;
+    instances[item.ref] = equipment;
+    system.addEquipment(equipment, item.position);
+    renderEquipment(equipment, item.position);
+  });
+
+  const findPort = (ref, definitionId) =>
+    instances[ref]?.ports.find((port) => port.definitionId === definitionId);
+
+  const plannedConnections = [
+    { from: ["wiredMic", "mic-wired-out"], to: ["mixer", "mixer-compact-ch1"] },
+    { from: ["wirelessMic", "mic-wireless-audio"], to: ["mixer", "mixer-compact-ch2"] },
+    {
+      from: ["mixer", "mixer-compact-main-l"],
+      to: ["leftSpeaker", "speaker-powered-line"]
+    },
+    {
+      from: ["mixer", "mixer-compact-main-r"],
+      to: ["rightSpeaker", "speaker-powered-line"]
+    },
+    { from: ["distro", "power-distro-a"], to: ["mixer", "mixer-compact-power"] },
+    {
+      from: ["distro", "power-distro-b"],
+      to: ["leftSpeaker", "speaker-powered-power"]
+    },
+    {
+      from: ["distro", "power-distro-c"],
+      to: ["rightSpeaker", "speaker-powered-power"]
+    },
+    {
+      from: ["distro", "power-distro-d"],
+      to: ["wirelessMic", "mic-wireless-power"]
+    }
+  ];
+
+  plannedConnections.forEach((link) => {
+    const fromPort = findPort(link.from[0], link.from[1]);
+    const toPort = findPort(link.to[0], link.to[1]);
+    if (!fromPort || !toPort) return;
+    const result = system.connect(fromPort, toPort);
+    if (result.ok) {
+      logInspector(`Auto-connected ${fromPort.label} to ${toPort.label}.`, "ok");
+    } else {
+      logInspector(`Auto-connect failed: ${result.reason}`, "error");
+    }
+  });
+
+  if (plannedConnections.length) {
+    logInspector("Starter AV rig ready with mics, mixer, speakers, and power.", "ok");
+  }
+
+  renderConnections();
+}
+
 renderComponentLibrary();
 setupCanvasInteractions();
+bootstrapDemoRig();
+window.addEventListener("resize", () => renderConnections());
