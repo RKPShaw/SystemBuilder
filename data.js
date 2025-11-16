@@ -1,57 +1,69 @@
 export const COMPONENT_LIBRARY = [
   {
-    id: "pump-001",
-    name: "Centrifugal Pump",
-    category: "Fluid Handling",
-    description: "Moves process fluid through the loop.",
+    id: "mixer-compact",
+    name: "Compact Audio Mixer",
+    category: "Sound",
+    description: "Two-channel mixer with balanced main outs.",
     ports: [
-      { id: "pump-001-in", label: "Suction", direction: "input", medium: "water" },
-      { id: "pump-001-out", label: "Discharge", direction: "output", medium: "water" },
-      { id: "pump-001-power", label: "Power", direction: "input", medium: "power" }
+      { id: "mixer-compact-ch1", label: "Mic In 1", direction: "input", medium: "audio" },
+      { id: "mixer-compact-ch2", label: "Mic In 2", direction: "input", medium: "audio" },
+      { id: "mixer-compact-main-l", label: "Main Out L", direction: "output", medium: "audio" },
+      { id: "mixer-compact-main-r", label: "Main Out R", direction: "output", medium: "audio" },
+      { id: "mixer-compact-aux", label: "Aux Send", direction: "output", medium: "audio" },
+      { id: "mixer-compact-power", label: "Power In", direction: "input", medium: "power" }
     ]
   },
   {
-    id: "hx-001",
-    name: "Plate Heat Exchanger",
-    category: "Thermal",
-    description: "Transfers heat between two circuits.",
+    id: "mic-wired",
+    name: "Wired Vocal Mic",
+    category: "Sound",
+    description: "Dynamic microphone for vocals.",
     ports: [
-      { id: "hx-001-hot-in", label: "Hot In", direction: "input", medium: "water" },
-      { id: "hx-001-hot-out", label: "Hot Out", direction: "output", medium: "water" },
-      { id: "hx-001-cold-in", label: "Cold In", direction: "input", medium: "glycol" },
-      { id: "hx-001-cold-out", label: "Cold Out", direction: "output", medium: "glycol" }
+      { id: "mic-wired-out", label: "XLR Out", direction: "output", medium: "audio" }
     ]
   },
   {
-    id: "valve-001",
-    name: "Control Valve",
-    category: "Flow Control",
-    description: "Throttles downstream flow.",
+    id: "mic-wireless",
+    name: "Wireless Lavalier",
+    category: "Sound",
+    description: "Bodypack wireless system.",
     ports: [
-      { id: "valve-001-in", label: "Inlet", direction: "input", medium: "water" },
-      { id: "valve-001-out", label: "Outlet", direction: "output", medium: "water" },
-      { id: "valve-001-signal", label: "Signal", direction: "input", medium: "control" }
+      { id: "mic-wireless-audio", label: "Audio Out", direction: "output", medium: "audio" },
+      { id: "mic-wireless-power", label: "DC In", direction: "input", medium: "power" }
     ]
   },
   {
-    id: "sensor-001",
-    name: "Temperature Sensor",
-    category: "Instrumentation",
-    description: "Reports temperature to the controller.",
+    id: "speaker-powered",
+    name: "Powered Speaker",
+    category: "Sound",
+    description: "12"" full-range cabinet.",
     ports: [
-      { id: "sensor-001-process", label: "Process", direction: "input", medium: "water" },
-      { id: "sensor-001-signal", label: "Signal", direction: "output", medium: "control" }
+      { id: "speaker-powered-line", label: "Line In", direction: "input", medium: "audio" },
+      { id: "speaker-powered-link", label: "Link Out", direction: "output", medium: "audio" },
+      { id: "speaker-powered-power", label: "Power In", direction: "input", medium: "power" }
     ]
   },
   {
-    id: "controller-001",
-    name: "PID Controller",
-    category: "Control",
-    description: "Manages setpoints and outputs.",
+    id: "stage-monitor",
+    name: "Stage Monitor",
+    category: "Sound",
+    description: "Wedge for performers.",
     ports: [
-      { id: "controller-001-sense", label: "Sense", direction: "input", medium: "control" },
-      { id: "controller-001-drive", label: "Drive", direction: "output", medium: "control" },
-      { id: "controller-001-power", label: "Power", direction: "input", medium: "power" }
+      { id: "stage-monitor-line", label: "Line In", direction: "input", medium: "audio" },
+      { id: "stage-monitor-power", label: "Power In", direction: "input", medium: "power" }
+    ]
+  },
+  {
+    id: "power-distro",
+    name: "Power Distro",
+    category: "Power",
+    description: "Feeds gear with conditioned AC.",
+    ports: [
+      { id: "power-distro-mains", label: "AC In", direction: "input", medium: "power" },
+      { id: "power-distro-a", label: "Outlet A", direction: "output", medium: "power" },
+      { id: "power-distro-b", label: "Outlet B", direction: "output", medium: "power" },
+      { id: "power-distro-c", label: "Outlet C", direction: "output", medium: "power" },
+      { id: "power-distro-d", label: "Outlet D", direction: "output", medium: "power" }
     ]
   }
 ];

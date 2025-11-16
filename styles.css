@@ -114,6 +114,38 @@ body {
   overflow: hidden;
 }
 
+.connection-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.connection-wire {
+  fill: none;
+  stroke: #475569;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 6px rgb(15 23 42 / 0.15));
+  opacity: 0.9;
+}
+
+.connection-wire[data-medium="audio"] {
+  stroke: #8b5cf6;
+}
+
+.connection-wire[data-medium="power"] {
+  stroke: #f97316;
+  stroke-dasharray: 8 6;
+}
+
+.connection-wire[data-medium="control"] {
+  stroke: #0ea5e9;
+}
+
 .canvas-placeholder {
   position: absolute;
   inset: 50% auto auto 50%;
@@ -121,6 +153,7 @@ body {
   color: #94a3b8;
   margin: 0;
   text-align: center;
+  z-index: 0;
 }
 
 .equipment {
@@ -135,6 +168,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  z-index: 2;
 }
 
 .equipment[data-selected="true"] {
