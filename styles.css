@@ -1,0 +1,218 @@
+:root {
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.4;
+  color: #0f172a;
+  background-color: #f1f5f9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--page-bg, #e2e8f0);
+}
+
+.app-header {
+  padding: 1.5rem clamp(1rem, 4vw, 3rem);
+  background: #0f172a;
+  color: #f8fafc;
+  border-bottom: 4px solid #38bdf8;
+  box-shadow: 0 4px 12px rgb(15 23 42 / 0.35);
+}
+
+.app-header h1 {
+  margin: 0 0 0.25rem;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.app-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 280px minmax(400px, 1fr) 260px;
+  padding: 1rem clamp(1rem, 4vw, 3rem) 2rem;
+}
+
+.panel {
+  background: #fff;
+  border-radius: 18px;
+  padding: 0;
+  box-shadow: 0 20px 40px rgb(15 23 42 / 0.08);
+  display: flex;
+  flex-direction: column;
+  min-height: 70vh;
+}
+
+.panel-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.panel h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.component-list {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+}
+
+.component-card {
+  border: 1px solid #cbd5f5;
+  border-radius: 16px;
+  padding: 0.75rem 1rem;
+  cursor: grab;
+  background: linear-gradient(135deg, #f8fafc, #eff6ff);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.component-card:active {
+  cursor: grabbing;
+  transform: scale(0.98);
+}
+
+.component-card:hover {
+  box-shadow: 0 12px 30px rgb(59 130 246 / 0.2);
+}
+
+.component-meta {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #475569;
+}
+
+.canvas-panel {
+  grid-column: 2 / span 1;
+  background: transparent;
+}
+
+.canvas-panel .panel-header {
+  background: #fff;
+  border-radius: 18px 18px 0 0;
+  border: none;
+  box-shadow: 0 10px 20px rgb(15 23 42 / 0.1);
+}
+
+.canvas {
+  position: relative;
+  height: 70vh;
+  border-radius: 0 0 24px 24px;
+  background-image: linear-gradient(#e2e8f0 1px, transparent 1px),
+    linear-gradient(90deg, #e2e8f0 1px, transparent 1px);
+  background-size: 48px 48px;
+  background-color: #f8fafc;
+  box-shadow: 0 20px 40px rgb(15 23 42 / 0.12);
+  overflow: hidden;
+}
+
+.canvas-placeholder {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  color: #94a3b8;
+  margin: 0;
+  text-align: center;
+}
+
+.equipment {
+  position: absolute;
+  width: 170px;
+  min-height: 80px;
+  background: #fff;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  box-shadow: 0 12px 30px rgb(15 23 42 / 0.18);
+  padding: 0.75rem 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.equipment[data-selected="true"] {
+  border-color: #38bdf8;
+}
+
+.equipment-title {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.port-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.port {
+  padding: 0.25rem 0.4rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  border: 1px solid #94a3b8;
+  cursor: pointer;
+  background: #f8fafc;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.port[data-direction="input"] {
+  border-color: #16a34a;
+  color: #15803d;
+}
+
+.port[data-direction="output"] {
+  border-color: #2563eb;
+  color: #1d4ed8;
+}
+
+.port[data-selected="true"] {
+  background: #38bdf8;
+  color: #0f172a;
+}
+
+.inspector-log {
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.inspector-log p {
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.inspector-log p:last-child {
+  border-bottom: none;
+}
+
+.connection-ok {
+  color: #16a34a;
+}
+
+.connection-error {
+  color: #dc2626;
+}
+
+@media (max-width: 1100px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .panel,
+  .canvas-panel {
+    min-height: auto;
+  }
+
+  .canvas {
+    height: 60vh;
+  }
+}
