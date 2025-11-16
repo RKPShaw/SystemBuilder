@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>System Builder Prototype</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>System Builder Prototype</h1>
+      <p>Create simple equipment layouts and validate connections.</p>
+    </header>
+
+    <main class="app-grid">
+      <section class="panel component-library" aria-label="Component library">
+        <div class="panel-header">
+          <h2>Component Library</h2>
+          <p>Drag items to the canvas.</p>
+        </div>
+        <div id="component-list" class="component-list"></div>
+      </section>
+
+      <section class="canvas-panel" aria-label="Canvas">
+        <div class="panel-header">
+          <h2>Canvas</h2>
+          <p>Drop equipment and connect matching ports.</p>
+        </div>
+        <div id="canvas" class="canvas" tabindex="0">
+          <p class="canvas-placeholder">Drop components here to start building.</p>
+        </div>
+      </section>
+
+      <section class="panel inspector" aria-label="Connection inspector">
+        <div class="panel-header">
+          <h2>Connection Inspector</h2>
+          <p>Review compatibility feedback.</p>
+        </div>
+        <div id="inspector-log" class="inspector-log">
+          <p>No interactions yet.</p>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
